@@ -1,6 +1,7 @@
 FROM docker.io/nvidia/cuda:12.3.1-devel-ubuntu22.04 AS prepare
 WORKDIR /work
 ADD https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q6_K.gguf?download=true .
+ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on"
 RUN --mount=type=cache,target=/root/.cache/pip \
 	set -eux ;\
 	apt update ;\
