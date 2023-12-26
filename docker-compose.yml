@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  lipsync:
+    build: lipsync
+    container_name: lipsync
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - "./personalities:/personalities"
+      - "./data/share:/share"
+  engine:
+    build: personality-engine
+    container_name: engine
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - "./personalities:/personalities"
+      - "./data/share:/share"

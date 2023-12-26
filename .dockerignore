@@ -1,0 +1,25 @@
+.git/
+**/*
+!**/*/
+
+!**/.git*
+!**/.tokei*
+!**/.docker*
+!**/README.md
+!**/Dockerfile
+
+!LICENSE
+!docker-compose.yml
+
+**/.idea/**/*
+**/data/**/*
+
+# From engine/.gitignore
+!engine/**/*.sh
+!engine/**/*.py
+
+# From personalities/.gitignore
+!personalities/**/*.json
+!personalities/**/*.mp4
+!personalities/**/*.wav
+

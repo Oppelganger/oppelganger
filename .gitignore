@@ -1,0 +1,14 @@
+*
+!*/
+
+!.git*
+!.tokei*
+!.docker*
+!README.md
+!Dockerfile
+
+!/LICENSE
+!/docker-compose.yml
+
+.idea/**/*
+data/**/*
