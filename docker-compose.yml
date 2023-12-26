@@ -11,8 +11,8 @@ services:
       - "./personalities:/personalities"
       - "./data/share:/share"
   engine:
-    build: personality-engine
-    container_name: engine
+    build: engine
+    container_name: personality-engine
     tty: true
     stdin_open: true
     restart: unless-stopped
