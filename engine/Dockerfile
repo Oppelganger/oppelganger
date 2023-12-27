@@ -2,7 +2,6 @@ ARG CUDA_VERSION
 
 FROM docker.io/nvidia/cuda:${CUDA_VERSION}-devel-ubuntu22.04 AS prepare
 WORKDIR /work
-ADD https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q6_K.gguf?download=true .
 ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on"
 RUN --mount=type=cache,target=/root/.cache/pip \
 	set -eux ;\
@@ -28,7 +27,7 @@ RUN set -eux ;\
 	apt clean
 WORKDIR /work
 COPY --from=prepare /work/venv venv
-COPY --from=prepare /work/mistral-7b-instruct-v0.2.Q6_K.gguf models/
+ADD https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q6_K.gguf?download=true models/
 COPY main.py .
 COPY launch.sh /
 
