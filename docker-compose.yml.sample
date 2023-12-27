@@ -11,7 +11,10 @@ services:
       - "./personalities:/personalities"
       - "./data/share:/share"
   engine:
-    build: engine
+    build:
+      context: engine
+      args:
+        CUDA_VERSION: 12.2.2
     container_name: personality-engine
     tty: true
     stdin_open: true
