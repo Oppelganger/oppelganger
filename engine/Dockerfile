@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 		torch ;\
 	pip cache purge
 
-FROM docker.io/ubuntu:22.04 AS final
+FROM docker.io/nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS final
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
