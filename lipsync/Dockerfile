@@ -55,5 +55,6 @@ COPY --from=downloads /work/wav2lip.pth checkpoints
 FROM lipsync AS final
 WORKDIR /app
 COPY --from=golang /work/main /main
+COPY launch.sh /
 EXPOSE 6873/tcp
-ENTRYPOINT [ "/main" ]
+ENTRYPOINT [ "/launch.sh" ]

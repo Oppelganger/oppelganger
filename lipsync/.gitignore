@@ -1,3 +1,4 @@
+!*.sh
 !*.go
 !/go.mod
 !/go.sum
