@@ -22,7 +22,7 @@ RUN --mount=type=cache,mode=0755,target=/go/pkg/mod \
 	--mount=type=cache,target=/root/.cache/go-build \
 	go build -ldflags="-w -s" -v -o main main.go
 
-FROM docker.io/ubuntu:22.04 AS lipsync
+FROM docker.io/nvidia/cuda:11.7.1-runtime-ubuntu22.04 AS lipsync
 WORKDIR /app
 
 RUN set -eux ;\
