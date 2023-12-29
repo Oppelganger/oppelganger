@@ -89,7 +89,7 @@ async def get_generate(req: GenerateRequest):
     print(f"Result: {wav2lip.text}")
     file = wav2lip.text
     vo = Path(f"/result/{uuid.uuid4()}.mp4")
-    subprocess.run(["ffmpeg", "-i", file, "-vf", f"crop={sample_video.crop}", "-t", "00:01:00", "-c:v", "h264_nvenc", vo])
+    subprocess.run(["ffmpeg", "-i", file, "-vf", f"crop={sample_video.crop}", "-t", "00:00:55", "-c:v", "h264_nvenc", vo])
     return { "result": str(vo) }
   else:
     return { "result": wav2lip.text }
