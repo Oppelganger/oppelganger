@@ -1,5 +1,9 @@
 version: "3.9"
 
+x-nv: &nv
+  NVIDIA_DRIVER_CAPABILITIES: all
+  NVIDIA_VISIBLE_DEVICES: all
+
 services:
   lipsync:
     build: lipsync
@@ -10,6 +14,7 @@ services:
     volumes:
     - "./personalities:/personalities"
     - "./data/share:/share"
+    environment: *nv
   engine:
     build:
       context: engine
@@ -27,6 +32,7 @@ services:
     - "./data/engine-cache:/root/.cache"
     depends_on:
     - lipsync
+    environment: *nv
   bot:
     build: bot
     hostname: bot
