@@ -4,6 +4,7 @@ import uuid
 import random
 import asyncio
 import requests
+import subprocess
 
 import torch
 
@@ -70,7 +71,8 @@ async def get_generate(req: GenerateRequest):
   out = Path(f"/share/{uuid.uuid4()}")
   out.mkdir(parents=True, exist_ok=False)
 
-  video = personality.path / random.choice(personality.sample_video)
+  sample_video = random.choice(personality.sample_video)
+  video = personality.path / sample_video.name
 
   tts.tts_to_file(
     text=text,
@@ -82,5 +84,11 @@ async def get_generate(req: GenerateRequest):
 
   wav2lip = requests.post("http://lipsync:6873", json={"audio_path": str(out / "audio.wav"), "video_path": str(video)})
 
-  print(f"Result: {wav2lip.text}")
-  return { "result": wav2lip.text }
+  if wav2lip.status_code == 200:
+    print(f"Result: {wav2lip.text}")
+    file = wav2lip.text
+    vo = Path(f"/result/{uuid.uuid4()}.mp4")
+    subprocess.run(["ffmpeg", "-i", file, "-vf", f"crop={sample_video.crop}", "-t", "00:01:00", "-c:v", "h264_nvenc", vo])
+    return { "result": str(vo) }
+  else:
+    return { "result": wav2lip.text }

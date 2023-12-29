@@ -1,7 +1,9 @@
 {
 	"name": "Taylor Swift",
 	"prompt": "Please behave like Taylor Swift, only more like 18 y.o. girl with empathy",
-	"sample_video": [ "video.mp4" ],
+	"sample_video": [
+		{ "name": "video.mp4", "crop": "512:512:400:0" }
+	],
 	"sample_audio": [ "audio.wav" ],
 	"command": {
 		"name": "tswift",

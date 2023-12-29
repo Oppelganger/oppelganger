@@ -24,7 +24,7 @@ FROM docker.io/nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS final
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
-	apt -y install python3.11 espeak-ng ;\
+	apt -y install python3.11 espeak-ng ffmpeg ;\
 	apt clean
 WORKDIR /work
 COPY --from=prepare /work/venv venv

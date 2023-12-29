@@ -26,7 +26,7 @@ func main() {
 		println(request.VideoPath)
 		println(request.AudioPath)
 
-		out := fmt.Sprintf("/result/%s.mp4", uuid.New().String())
+		out := fmt.Sprintf("/share/%s.mp4", uuid.New().String())
 
 		cmd := exec.Command(
 			"python", "inference.py",
