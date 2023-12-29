@@ -48,7 +48,12 @@ tts_model_path, _, _ = model_manager.download_model("tts_models/multilingual/mul
 tts_config = XttsConfig()
 tts_config.load_json(f"{tts_model_path}/config.json")
 tts = Xtts.init_from_config(tts_config)
-tts.load_checkpoint(tts_config, checkpoint_dir=tts_model_path, use_deepspeed=False)
+tts.load_checkpoint(
+  tts_config,
+  checkpoint_dir=tts_model_path,
+  vocab_path=f"{tts_model_path}/vocab.json",
+  use_deepspeed=False
+)
 
 if torch.cuda.is_available():
   tts.cuda()
@@ -61,7 +66,12 @@ for path in Path("/personalities").glob("*/"):
     personality.path = path
 
     voices = [str(path / audio) for audio in personality.sample_audio]
-    gpt_cond_latent, speaker_embedding = tts.get_conditioning_latents(audio_path=voices)
+    gpt_cond_latent, speaker_embedding = tts.get_conditioning_latents(
+      audio_path=voices,
+      gpt_cond_len=tts.config.gpt_cond_len,
+      max_ref_length=tts.config.max_ref_len,
+      sound_norm_refs=tts.config.sound_norm_refs
+    )
 
     personality.gpt_cond_latent = gpt_cond_latent.to(torch_device)
     personality.speaker_embedding = speaker_embedding.to(torch_device)
@@ -115,7 +125,7 @@ async def get_generate(req: GenerateRequest):
     "en",
     personality.gpt_cond_latent,
     personality.speaker_embedding,
-    speed=1.35,
+    speed=1.1,
     enable_text_splitting=True,
     temperature=tts.config.temperature,
     length_penalty=tts.config.length_penalty,
