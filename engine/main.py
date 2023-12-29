@@ -25,7 +25,7 @@ torch_device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f'Torch devide {torch_device}')
 
 mixtral = Llama(
-  model_path = "./models/mistral-7b-instruct-v0.2.Q6_K.gguf",
+  model_path = "./models/mixtral_7bx2_moe.Q5_K_M.gguf",
   chat_format = "llama-2",
   n_gpu_layers=-1,
   seed=-1,

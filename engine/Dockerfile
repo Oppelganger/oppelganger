@@ -28,7 +28,7 @@ RUN set -eux ;\
 	apt clean
 WORKDIR /work
 COPY --from=prepare /work/venv venv
-ADD https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q6_K.gguf?download=true models/
+ADD https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf models/
 COPY main.py .
 COPY launch.sh /
 
