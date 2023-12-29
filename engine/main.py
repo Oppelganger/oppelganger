@@ -29,9 +29,11 @@ mixtral = Llama(
   chat_format = "llama-2",
   n_gpu_layers=-1,
   seed=-1,
-  n_threads=16,
+  n_threads=64,
+  n_threads_batch=64,
   offload_kqv=True,
   numa=True,
+  use_mlock=True,
 )
 
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(torch_device)
