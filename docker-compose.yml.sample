@@ -33,6 +33,8 @@ services:
     depends_on:
     - lipsync
     environment: *nv
+    ulimits:
+      memlock: -1
   bot:
     build: bot
     hostname: bot
