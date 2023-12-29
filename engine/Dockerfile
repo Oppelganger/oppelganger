@@ -21,14 +21,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 	pip cache purge
 
 FROM docker.io/nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS final
+WORKDIR /work
+ADD https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf models/
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
-	apt -y install python3.11 espeak-ng ffmpeg ;\
+	apt -y install python3.11 ffmpeg ;\
 	apt clean
-WORKDIR /work
 COPY --from=prepare /work/venv venv
-ADD https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf models/
 COPY main.py .
 COPY launch.sh /
 
