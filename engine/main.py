@@ -9,6 +9,8 @@ import subprocess
 import torch
 import torchaudio
 
+from datetime import datetime
+
 from pathlib import Path
 from dotmap import DotMap
 from llama_cpp import Llama
@@ -68,6 +70,10 @@ for path in Path("/personalities").glob("*/"):
 
 persons = {person.command.name: person for person in personalities}
 
+def gtime():
+  now = datetime.now()
+  return now.strftime("%H:%M:%S")
+
 @app.get("/persons", response_model=dict[str, str])
 async def get_persons():
   return {p.command.name: p.command.desc for p in personalities}
@@ -92,7 +98,9 @@ async def get_generate(req: GenerateRequest):
     { "role": "user", "content": user_input },
   ]
 
+  print(f"{gtime()}: llm start")
   result = DotMap(mixtral.create_chat_completion(messages, max_tokens=50))
+  print(f"{gtime()}: llm end")
   text = result.choices[0].message.content
 
   out = Path(f"/share/{uuid.uuid4()}")
@@ -101,6 +109,7 @@ async def get_generate(req: GenerateRequest):
   sample_video = random.choice(personality.sample_video)
   video = personality.path / sample_video.name
 
+  print(f"{gtime()}: tts infer start")
   tres = tts.inference(
     text,
     "en",
@@ -114,16 +123,23 @@ async def get_generate(req: GenerateRequest):
     top_k=tts.config.top_k,
     top_p=tts.config.top_p,
   )
+  print(f"{gtime()}: tts infer end")
 
+  print(f"{gtime()}: tts save start")
   torchaudio.save(str(out / "audio.wav"), torch.tensor(tres["wav"]).unsqueeze(0), 24000)
+  print(f"{gtime()}: tts save end")
 
+  print(f"{gtime()}: lipsync start")
   wav2lip = requests.post("http://lipsync:6873", json={"audio_path": str(out / "audio.wav"), "video_path": str(video)})
+  print(f"{gtime()}: lipsync stop")
 
   if wav2lip.status_code == 200:
     print(f"Result: {wav2lip.text}")
     file = wav2lip.text
     vo = Path(f"/result/{uuid.uuid4()}.mp4")
+    print(f"{gtime()}: ffmpeg start")
     subprocess.run(["ffmpeg", "-i", file, "-vf", f"crop={sample_video.crop}", "-t", "00:00:55", vo])
+    print(f"{gtime()}: ffmpeg stop")
     return { "result": str(vo) }
   else:
     return { "result": wav2lip.text }
