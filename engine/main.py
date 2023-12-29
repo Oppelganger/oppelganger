@@ -62,6 +62,7 @@ async def get_generate(req: GenerateRequest):
 
   messages = [
     { "role": "system", "content": personality.prompt },
+    { "role": "system", "content": "Please write text in less than 20 words" },
     { "role": "user", "content": user_input },
   ]
 
