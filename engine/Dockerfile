@@ -17,6 +17,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 		llama-cpp-python \
 		dotmap \
 		torch \
+		torchaudio \
 		"fastapi[all]" ;\
 	pip cache purge
 
