@@ -73,7 +73,7 @@ async def get_generate(req: GenerateRequest):
     { "role": "user", "content": user_input },
   ]
 
-  result = DotMap(mixtral.create_chat_completion(messages))
+  result = DotMap(mixtral.create_chat_completion(messages, max_tokens=20))
   text = result.choices[0].message.content
 
   out = Path(f"/share/{uuid.uuid4()}")
