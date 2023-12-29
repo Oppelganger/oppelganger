@@ -116,8 +116,7 @@ async def get_generate(req: GenerateRequest):
   out = Path(f"/share/{uuid.uuid4()}")
   out.mkdir(parents=True, exist_ok=False)
 
-  sample_video = random.choice(personality.sample_video)
-  video = personality.path / sample_video.name
+  video = personality.path / random.choice(personality.sample_video)
 
   print(f"{gtime()}: tts infer start")
   tres = tts.inference(
@@ -143,13 +142,5 @@ async def get_generate(req: GenerateRequest):
   wav2lip = requests.post("http://lipsync:6873", json={"audio_path": str(out / "audio.wav"), "video_path": str(video)})
   print(f"{gtime()}: lipsync stop")
 
-  if wav2lip.status_code == 200:
-    print(f"Result: {wav2lip.text}")
-    file = wav2lip.text
-    vo = Path(f"/result/{uuid.uuid4()}.mp4")
-    print(f"{gtime()}: ffmpeg start")
-    subprocess.run(["ffmpeg", "-i", file, "-vf", f"crop={sample_video.crop}", "-t", "00:00:55", vo])
-    print(f"{gtime()}: ffmpeg stop")
-    return { "result": str(vo) }
-  else:
-    return { "result": wav2lip.text }
+  print(f"Result: {wav2lip.text}")
+  return { "result": wav2lip.text }

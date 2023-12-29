@@ -14,6 +14,7 @@ services:
     volumes:
     - "./personalities:/personalities"
     - "./data/share:/share"
+    - "./data/result:/result"
     environment: *nv
   engine:
     build:
@@ -27,7 +28,6 @@ services:
     volumes:
     - "./personalities:/personalities"
     - "./data/share:/share"
-    - "./data/result:/result"
     - "./data/engine-local:/root/.local"
     - "./data/engine-cache:/root/.cache"
     depends_on:

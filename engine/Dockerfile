@@ -27,7 +27,7 @@ ADD https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
-	apt -y install python3.11 ffmpeg ;\
+	apt -y install python3.11 ;\
 	apt clean
 COPY --from=prepare /work/venv venv
 COPY main.py .
