@@ -1,13 +1,23 @@
+import os
 import json
 import uuid
-import torch
 import random
+import asyncio
 import requests
+
+import torch
 
 from pathlib import Path
 from dotmap import DotMap
-from TTS.api import TTS
 from llama_cpp import Llama
+
+from pydantic import BaseModel
+
+from TTS.api import TTS
+
+from fastapi import FastAPI
+
+app = FastAPI()
 
 torch_device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -18,7 +28,7 @@ mixtral = Llama(
   chat_format = "llama-2"
 )
 
-tts = TTS("tts_models/multilingual/multi-dataset/your_tts").to(torch_device)
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(torch_device)
 
 personalities = []
 
@@ -27,29 +37,50 @@ for path in Path("/personalities").glob("*/"):
     personalitiy = DotMap(json.load(metajson))
     personalitiy.path = path
 
-    print(f"{len(personalities)}. {personalitiy.name}")
     personalities.append(personalitiy)
 
-while True:
-  personality = personalities[int(input("Please select an personality: "))]
-  user_prompt = input("Ask anything: ")
+persons = {person.command.name: person for person in personalities}
+
+@app.get("/persons", response_model=dict[str, str])
+async def get_persons():
+  return {p.command.name: p.command.desc for p in personalities}
+
+class GenerateRequest(BaseModel):
+  person: str
+  text: str
+
+@app.post("/generate")
+async def get_generate(req: GenerateRequest):
+  print(req.text)
+  user_input = req.text
+
+  if user_input == "":
+    return
+
+  personality = persons[req.person]
 
   messages = [
     { "role": "system", "content": personality.prompt },
-    { "role": "user", "content": user_prompt },
+    { "role": "user", "content": user_input },
   ]
 
   result = DotMap(mixtral.create_chat_completion(messages))
-  text = " ".join(result.choices[0].message.content.split(".")[:4])
+  text = result.choices[0].message.content
 
   out = Path(f"/share/{uuid.uuid4()}")
   out.mkdir(parents=True, exist_ok=False)
 
-  voice = personality.path / random.choice(personality.sample_audio)
   video = personality.path / random.choice(personality.sample_video)
 
-  tts.tts_to_file(text=text, speaker_wav=voice, file_path=out / "audio.wav", language="en")
+  tts.tts_to_file(
+    text=text,
+    language="en",
+    speaker_wav=[str(personality.path / audio) for audio in personality.sample_audio],
+    file_path=str(out / "audio.wav"),
+    speed=1.5,
+  )
 
   wav2lip = requests.post("http://lipsync:6873", json={"audio_path": str(out / "audio.wav"), "video_path": str(video)})
 
   print(f"Result: {wav2lip.text}")
+  return { "result": wav2lip.text }

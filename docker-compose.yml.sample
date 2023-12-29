@@ -3,22 +3,41 @@ version: "3.9"
 services:
   lipsync:
     build: lipsync
-    container_name: lipsync
+    hostname: lipsync
     tty: true
     stdin_open: true
     restart: unless-stopped
     volumes:
-      - "./personalities:/personalities"
-      - "./data/share:/share"
+    - "./personalities:/personalities"
+    - "./data/share:/share"
+    - "./data/result:/result"
   engine:
     build:
       context: engine
       args:
         CUDA_VERSION: 12.2.2
-    container_name: personality-engine
+    hostname: engine
     tty: true
     stdin_open: true
     restart: unless-stopped
     volumes:
-      - "./personalities:/personalities"
-      - "./data/share:/share"
+    - "./personalities:/personalities"
+    - "./data/share:/share"
+    - "./data/engine-local:/root/.local"
+    - "./data/engine-cache:/root/.cache"
+    depends_on:
+    - lipsync
+  bot:
+    build: bot
+    hostname: bot
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+    - "./data/result:/result"
+    depends_on:
+    - engine
+    environment:
+      TG_API_ID: "my.telegram.org"
+      TG_API_HASH: "my.telegram.org"
+      TG_BOT_TOKEN: "@botfather"

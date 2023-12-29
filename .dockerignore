@@ -9,14 +9,25 @@
 !**/Dockerfile
 
 !LICENSE
-!docker-compose.yml
+!docker-compose.yml.sample
 
 **/.idea/**/*
 **/data/**/*
 
+# From bot/.gitignore
+!bot/**/*.sh
+!bot/**/*.py
+
 # From engine/.gitignore
 !engine/**/*.sh
 !engine/**/*.py
+
+# From lipsync/.gitignore
+!lipsync/**/*.sh
+!lipsync/**/*.go
+!lipsync/go.mod
+!lipsync/go.sum
+!lipsync/**/*.pth
 
 # From personalities/.gitignore
 !personalities/**/*.json
