@@ -26,7 +26,12 @@ print(f'Torch devide {torch_device}')
 
 mixtral = Llama(
   model_path = "./models/mistral-7b-instruct-v0.2.Q6_K.gguf",
-  chat_format = "llama-2"
+  chat_format = "llama-2",
+  n_gpu_layers=-1,
+  seed=-1,
+  n_threads=16,
+  offload_kqv=True,
+  numa=True,
 )
 
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(torch_device)
