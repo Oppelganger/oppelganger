@@ -87,7 +87,7 @@ async def get_generate(req: GenerateRequest):
     language="en",
     speaker_wav=[str(personality.path / audio) for audio in personality.sample_audio],
     file_path=str(out / "audio.wav"),
-    speed=1.5,
+    speed=1.75,
   )
 
   wav2lip = requests.post("http://lipsync:6873", json={"audio_path": str(out / "audio.wav"), "video_path": str(video)})
