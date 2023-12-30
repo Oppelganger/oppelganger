@@ -1,14 +1,14 @@
 FROM docker.io/ubuntu:22.04 AS downloads
 WORKDIR /work
 
-ADD https://codeload.github.com/Rudrabha/Wav2Lip/tar.gz/29525604a6912ad647990f00f28ed831a15b1153 .
+ADD https://codeload.github.com/Kamillaova/Wav2Lip/tar.gz/5a3ec355be0f1c5a6e310f30fb752b5227c8aac0 .
 ADD https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth .
 ADD ./wav2lip.pth .
 
 RUN set -eux ;\
 	mkdir Wav2Lip ;\
 	ls ;\
-	tar xpf ./29525604a6912ad647990f00f28ed831a15b1153 -C Wav2Lip --strip-components=1 ;\
+	tar xpf ./5a3ec355be0f1c5a6e310f30fb752b5227c8aac0 -C Wav2Lip --strip-components=1 ;\
 	mv s3fd-619a316812.pth s3fd.pth
 
 FROM docker.io/golang:1.21-alpine3.18 AS golang
