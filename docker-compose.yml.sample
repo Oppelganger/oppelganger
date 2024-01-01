@@ -15,6 +15,8 @@ services:
     - "./personalities:/personalities"
     - "./data/share:/share"
     - "./data/result:/result"
+    tmpfs:
+    - /tmp:size=16G
     environment: *nv
   engine:
     build:

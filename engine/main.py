@@ -109,7 +109,7 @@ async def get_generate(req: GenerateRequest):
   ]
 
   print(f"{gtime()}: llm start")
-  result = DotMap(mixtral.create_chat_completion(messages, max_tokens=50))
+  result = DotMap(mixtral.create_chat_completion(messages, max_tokens=100))
   print(f"{gtime()}: llm end")
   text = result.choices[0].message.content
 
