@@ -1,6 +1,14 @@
 version: "3.9"
 
-x-nv: &nv
+x-nv-gpus: &nv-gpus
+  resources:
+    reservations:
+      devices:
+      - driver: nvidia
+        count: all
+        capabilities: [gpu]
+
+x-nv-cap: &nv-cap
   NVIDIA_DRIVER_CAPABILITIES: all
   NVIDIA_VISIBLE_DEVICES: all
 
@@ -17,7 +25,8 @@ services:
     - "./data/result:/result"
     tmpfs:
     - /tmp:size=16G
-    environment: *nv
+    deploy: *nv-gpus
+    environment: *nv-cap
   engine:
     build:
       context: engine
@@ -34,7 +43,8 @@ services:
     - "./data/engine-cache:/root/.cache"
     depends_on:
     - lipsync
-    environment: *nv
+    deploy: *nv-gpus
+    environment: *nv-cap
     ulimits:
       memlock: -1
   bot:
