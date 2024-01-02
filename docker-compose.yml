@@ -58,6 +58,6 @@ services:
     depends_on:
     - engine
     environment:
-      TG_API_ID: "my.telegram.org"
+      TG_API_ID: my.telegram.org
       TG_API_HASH: "my.telegram.org"
       TG_BOT_TOKEN: "@botfather"

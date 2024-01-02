@@ -9,7 +9,7 @@
 !**/Dockerfile
 
 !LICENSE
-!docker-compose.yml.sample
+!docker-compose.yml
 
 **/.idea/**/*
 **/data/**/*
