@@ -1,2 +1,6 @@
 !*.sh
 !*.py
+
+!/wav2lip.pth
+!/blazeface.tflite
+!/gfpgan.pth

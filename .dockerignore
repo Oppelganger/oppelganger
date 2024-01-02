@@ -27,6 +27,10 @@
 !lipsync/**/*.sh
 !lipsync/**/*.py
 
+!lipsync/wav2lip.pth
+!lipsync/blazeface.tflite
+!lipsync/gfpgan.pth
+
 # From personalities/.gitignore
 !personalities/**/*.json
 !personalities/**/*.mp4

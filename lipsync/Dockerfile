@@ -29,9 +29,9 @@ RUN set -eux ;\
 	apt -y install python3.11 ffmpeg ;\
 	apt clean
 COPY --from=prepare /work/venv venv
-ADD https://yaso.su/wav2lipgan models/wav2lip.pth
-ADD https://yaso.su/blazefaceshort models/blazeface.tflite
-ADD https://yaso.su/gfpgan models/gfpgan.pth
+COPY wav2lip.pth models/
+COPY blazeface.tflite models/
+COPY gfpgan.pth models/
 COPY ./wav2lip/ .
 COPY ./main.py .
 COPY ./launch.sh /
