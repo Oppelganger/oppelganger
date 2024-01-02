@@ -25,10 +25,7 @@
 
 # From lipsync/.gitignore
 !lipsync/**/*.sh
-!lipsync/**/*.go
-!lipsync/go.mod
-!lipsync/go.sum
-!lipsync/**/*.pth
+!lipsync/**/*.py
 
 # From personalities/.gitignore
 !personalities/**/*.json
