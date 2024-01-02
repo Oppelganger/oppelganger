@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -eu
 
-cd /app
+cd /work
 
 # shellcheck source=/dev/null
 . venv/bin/activate
 
-uvicorn --host 0.0.0.0 --port 6873 inference:app
+uvicorn --host 0.0.0.0 --port 6873 main:app

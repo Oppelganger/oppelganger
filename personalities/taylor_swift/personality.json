@@ -6,5 +6,7 @@
 	"command": {
 		"name": "tswift",
 		"desc": "Taylor Swift" 
-	}
+	},
+	"enhance": true,
+	"female": true
 }

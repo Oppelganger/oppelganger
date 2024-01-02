@@ -1,5 +1,7 @@
 version: "3.9"
 
+x-cuda: &cuda 12.2.2
+
 x-nv-gpus: &nv-gpus
   resources:
     reservations:
@@ -14,7 +16,10 @@ x-nv-cap: &nv-cap
 
 services:
   lipsync:
-    build: lipsync
+    build:
+      context: lipsync
+      args:
+        CUDA_VERSION: *cuda
     hostname: lipsync
     tty: true
     stdin_open: true
@@ -31,7 +36,7 @@ services:
     build:
       context: engine
       args:
-        CUDA_VERSION: 12.2.2
+        CUDA_VERSION: *cuda
     hostname: engine
     tty: true
     stdin_open: true

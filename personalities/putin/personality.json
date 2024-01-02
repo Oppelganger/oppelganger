@@ -6,5 +6,7 @@
 	"command": {
 		"name": "putin",
 		"desc": "Vladimir Putin" 
-	}
+	},
+	"enhance": false,
+	"female": false
 }

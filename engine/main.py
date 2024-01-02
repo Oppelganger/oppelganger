@@ -165,7 +165,12 @@ async def post_generate(req: GenerateRequest):
 
 	print(f"{gtime()}: lipsync start")
 	async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=None)) as h:
-		request = {"audio_path": str(out / "audio.wav"), "video_path": str(video)}
+		request = {
+			"audio_path": str(out / "audio.wav"),
+			"video_path": str(video),
+			"enhance": personality.enhance,
+			"female": personality.female,
+		}
 		async with h.post("http://lipsync:6873", json=request) as result:
 			wav2lip = await result.text()
 	print(f"{gtime()}: lipsync stop")
