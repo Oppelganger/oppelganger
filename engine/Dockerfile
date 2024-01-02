@@ -10,14 +10,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 	apt -y install python3.11-venv ;\
 	python3.11 -m venv venv ;\
 	. venv/bin/activate ;\
-	pip install --upgrade setuptools wheel ;\
-	pip install setuptools wheel ;\
+	pip install --upgrade pip setuptools wheel ;\
 	pip install \
 		TTS \
 		llama-cpp-python \
 		dotmap \
 		torch \
 		torchaudio \
+		aiohttp \
+		aiofiles \
 		"fastapi[all]" ;\
 	pip cache purge
 

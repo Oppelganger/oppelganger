@@ -12,6 +12,7 @@
 !docker-compose.yml
 
 **/.idea/**/*
+**/.idea/**/.*
 **/data/**/*
 
 # From bot/.gitignore
