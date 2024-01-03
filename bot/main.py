@@ -3,9 +3,6 @@ import os
 
 import aiohttp
 import pyrogram as pyro
-import uvloop
-
-uvloop.install()
 
 bot = pyro.Client(
 	"bot",

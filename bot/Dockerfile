@@ -11,7 +11,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 	pip install \
 		pyrogram \
 		tgcrypto \
-		uvloop \
 		aiohttp ;\
 	pip cache purge
 
