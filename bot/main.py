@@ -58,7 +58,9 @@ async def main():
 		async with h.get("http://engine:6767/persons") as result:
 			persons = await result.json()
 
-	bot.on_message(handle_command)(pyro.filters.command(list(persons.keys())))
+	@bot.on_message(pyro.filters.command(list(persons.keys())))
+	async def _command(client, message):
+		await handle_command(client, message)
 
 	async with bot:
 		await bot.set_bot_commands([pyro.types.BotCommand(p, persons[p]) for p in persons])
