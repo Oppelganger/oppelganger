@@ -6,18 +6,31 @@ WORKDIR /work
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
-	apt -y install python3.11-venv python3.11-dev build-essential ;\
+	apt -y install \
+		python3.11-venv \
+		python3.11-dev \
+		build-essential \
+		libgl1 \
+		libglib2.0-0 ;\
 	python3.11 -m venv venv ;\
 	. venv/bin/activate ;\
 	pip install --upgrade pip setuptools wheel ;\
+	pip install torch torchvision ;\
 	pip install \
 		numpy \
-    SciPy \
-		librosa \
-    mediapipe \
+		basicsr \
+		lmdb \
 		opencv-python \
-    gfpgan \
-		torch==1.13.1 \
+		pyyaml \
+		SciPy \
+		tb-nightly \
+		tqdm \
+		yapf ;\
+	pip install --no-dependencies facexlib ;\
+	pip install \
+		librosa \
+		mediapipe \
+		gfpgan \
 		"fastapi[all]" ;\
 	pip cache purge
 
@@ -26,13 +39,17 @@ WORKDIR /work
 RUN set -eux ;\
 	apt update ;\
 	apt -y full-upgrade ;\
-	apt -y install python3.11 ffmpeg ;\
+	apt -y install \
+		python3.11 \
+		ffmpeg \
+		libgl1 \
+		libglib2.0-0 ;\
 	apt clean
-COPY --from=prepare /work/venv venv
-COPY wav2lip.pth models/
-COPY blazeface.tflite models/
-COPY gfpgan.pth models/
-COPY ./wav2lip/ .
+COPY --from=prepare /work/venv venv/
+COPY ./wav2lip.pth models/
+COPY ./blazeface.tflite models/
+COPY ./gfpgan.pth models/
+COPY ./wav2lip/ wav2lip/
 COPY ./main.py .
 COPY ./launch.sh /
 EXPOSE 6873/tcp

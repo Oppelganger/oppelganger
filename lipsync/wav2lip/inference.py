@@ -7,13 +7,13 @@ from typing import List, Mapping, TypedDict, Optional
 import cv2
 import gfpgan
 import mediapipe as mp
-import mediapipe.tasks.python as mpp
-import mediapipe.tasks.python.vision as mpv
 import numpy as np
 import torch
+from mediapipe.tasks import python as mpp
+from mediapipe.tasks.python import vision as mpv
 
-from audio import load_wav, melspectrogram, Audio
-from models import Wav2Lip
+from .audio import load_wav, melspectrogram, Audio
+from .models import Wav2Lip
 
 face_size: int = 96
 batch_size: int = 128

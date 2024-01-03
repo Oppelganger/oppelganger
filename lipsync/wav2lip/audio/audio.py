@@ -53,16 +53,16 @@ def _stft(y: Audio) -> Audio:
 
 # Conversions
 _mel_basis_male = librosa.filters.mel(
-	_sample_rate,
-	_n_fft,
+	sr=_sample_rate,
+	n_fft=_n_fft,
 	n_mels=_num_mels,
 	fmin=_fmin_male,
 	fmax=_fmax
 )
 
 _mel_basis_female = librosa.filters.mel(
-	_sample_rate,
-	_n_fft,
+	sr=_sample_rate,
+	n_fft=_n_fft,
 	n_mels=_num_mels,
 	fmin=_fmin_female,
 	fmax=_fmax

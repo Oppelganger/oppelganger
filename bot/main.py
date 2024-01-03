@@ -58,7 +58,7 @@ async def command(message, user_input):
 
 async def main():
 	async with aiohttp.ClientSession() as h:
-		async with h.post("http://engine:6767/persons") as result:
+		async with h.get("http://engine:6767/persons") as result:
 			persons = await result.json()
 
 	bot.on_message(handle_command)(pyro.filters.command(list(persons.keys())))
