@@ -12,7 +12,7 @@ import torch
 from mediapipe.tasks import python as mpp
 from mediapipe.tasks.python import vision as mpv
 
-from .audio import load_wav, melspectrogram, Audio
+from .audio import load_wav, melspectrogram
 from .models import Wav2Lip
 
 face_size: int = 96
@@ -205,8 +205,8 @@ def wav2lip(
 		print('End detecting face on frames')
 		video_cache[in_video] = VideoCache(fps, full_frames, faces)
 
-	wav: Audio = load_wav(in_audio)
-	mel: Audio = melspectrogram(wav, female)
+	wav = load_wav(in_audio)
+	mel = melspectrogram(wav, female)
 
 	mel_chunks = []
 	mel_idx_multiplier = 80.0 / fps

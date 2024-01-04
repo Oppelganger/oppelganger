@@ -5,9 +5,6 @@ import librosa.filters
 import numpy as np
 from scipy import signal
 
-AudioDType: type = np.float32
-Audio: type = np.ndarray[AudioDType]
-
 _num_mels: int = 80  # Number of mel-spectrogram channels and local conditioning dimensionality
 _n_fft: int = 800  # Extra window size is filled with 0 paddings to match this parameter
 _hop_size: int = 200  # For 16000Hz, 200 = 12.5 ms (0.0125 * sample_rate)
@@ -22,33 +19,29 @@ _fmin_female = 55  # Set this to 95, if your speaker is female! It should help t
 _fmax = 7600  # To be increased/reduced depending on data.
 
 
-def load_wav(path: str | os.PathLike) -> Audio:
-	wav, _ = librosa.core.load(
-		path,
-		dtype=AudioDType,
-		sr=_sample_rate
-	)
-	return Audio(wav)
+def load_wav(path: str | os.PathLike):
+	wav, _ = librosa.core.load(path, sr=_sample_rate)
+	return wav
 
 
 # noinspection PyPep8Naming
-def melspectrogram(wav: Audio, female: bool) -> Audio:
+def melspectrogram(wav, female: bool):
 	D = np.abs(_stft(_preemphasis(wav)))
 	S = _amp_to_db(_linear_to_mel(D, female)) - _ref_level_db
 	return _normalize(S)
 
 
-def _preemphasis(wav: Audio, coef: float = 0.97) -> Audio:
-	return Audio(signal.lfilter([1.0, -coef], [1], wav))
+def _preemphasis(wav, coef: float = 0.97):
+	return signal.lfilter([1.0, -coef], [1], wav)
 
 
-def _stft(y: Audio) -> Audio:
-	return Audio(librosa.stft(
+def _stft(y):
+	return librosa.stft(
 		y=y,
 		n_fft=_n_fft,
 		hop_length=_hop_size,
 		win_length=_win_size
-	))
+	)
 
 
 # Conversions
@@ -70,9 +63,9 @@ _mel_basis_female = librosa.filters.mel(
 
 
 def _linear_to_mel(
-	spectrogram: Audio,
+	spectrogram,
 	female: bool
-) -> Audio:
+):
 	mel_basis: np.ndarray
 	if female:
 		mel_basis = _mel_basis_female
@@ -81,13 +74,13 @@ def _linear_to_mel(
 	return np.dot(mel_basis, spectrogram)
 
 
-def _amp_to_db(x: Audio) -> Audio:
+def _amp_to_db(x):
 	min_level = np.exp(_min_level_db / 20 * np.log(10))
 	return 20 * np.log10(np.maximum(min_level, x))
 
 
 # noinspection PyPep8Naming
-def _normalize(S: Audio) -> Audio:
+def _normalize(S):
 	return np.clip(
 		(2 * _max_abs_value) * ((S - _min_level_db) / -_min_level_db) - _max_abs_value,
 		-_max_abs_value,
