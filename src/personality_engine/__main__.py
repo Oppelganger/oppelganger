@@ -1,19 +1,20 @@
 import asyncio
 import os
+from typing import Callable, Awaitable, Any
 
 import aioboto3
 import runpod
 from aiobotocore.config import AioConfig as S3Config
 
-from .personalities import load_personalities
 from .handler import create_handler
 from .lipsync import load_wav2lip
 from .llm import load_llm
+from .personalities import load_personalities
 from .tts import load_xtts
 from .utils.torch import device as torch_device
 
 
-async def main():
+async def initialize_handler() -> Callable[..., Awaitable[Any]]:
 	llm = await load_llm()  # FIXME
 	xtts = await load_xtts()  # FIXME
 	wav2lip = await load_wav2lip(torch_device)  # FIXME
@@ -32,13 +33,11 @@ async def main():
 		async def upload_to_s3(path: str, object_name: str):
 			await s3.upload_file(path, bucket, object_name)
 
-		def start():
-			runpod.serverless.start({
-				'handler': create_handler(upload_to_s3, llm, xtts, wav2lip, personalities)
-			})
-
-		await asyncio.to_thread(start)
+		return create_handler(upload_to_s3, llm, xtts, wav2lip, personalities)
 
 
 if __name__ == '__main__':
-	asyncio.run(main())
+	handler = asyncio.run(initialize_handler())
+	runpod.serverless.start({
+		'handler': handler
+	})
