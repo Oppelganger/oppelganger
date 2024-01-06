@@ -54,13 +54,6 @@ RUN set -eux ;\
 ENV PYTHONPATH=/work/pkgs
 COPY --from=builder /work/__pypackages__/${PYTHON}/lib ./pkgs
 
-COPY src/launch.sh /launch.sh
-COPY src/personality_engine ./personality_engine
-
-COPY personalities /personalities
-
-COPY models /models
-
 ARG LLM_URL=https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf
 ADD ${LLM_URL} /models/llm.gguf
 
@@ -70,5 +63,12 @@ ADD ${XTTS_BASE_URL}/vocab.json /models/xtts/
 ADD ${XTTS_BASE_URL}/model.pth /models/xtts/
 ADD ${XTTS_BASE_URL}/speakers_xtts.pth /models/xtts/
 ADD ${XTTS_BASE_URL}/hash.md5 /models/xtts/
+
+COPY models /models
+COPY personalities /personalities
+
+COPY src/launch.sh /launch.sh
+COPY src/personality_engine ./personality_engine
+
 
 ENTRYPOINT [ "/launch.sh" ]
