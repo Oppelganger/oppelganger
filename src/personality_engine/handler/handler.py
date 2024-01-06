@@ -9,7 +9,6 @@ from llama_cpp import ChatCompletionRequestMessage, Llama
 
 from ..lipsync import Wav2Lip
 from ..llm import create_chat_completion
-from ..model import Job, JobTA
 from ..personalities import Personality
 from ..tts.xtts import inference as xtts
 
@@ -20,12 +19,12 @@ def create_handler(
 	xtts_model: Xtts,
 	wav2lip: Wav2Lip,
 	personalities: dict[str, Personality]
-) -> Callable[[Job], Coroutine[Any, Any, str | dict[str, Any]]]:
-	async def handler(job: Job) -> str | dict[str, Any]:
-		JobTA.validate_python(job)
+) -> Callable[[dict[str, Any]], Coroutine[Any, Any, str | dict[str, Any]]]:
+	async def handler(job: dict[str, Any]) -> str | dict[str, Any]:
+		input_data: dict[str, Any] = job['input']
 
-		user_input = job["text"]
-		personality = personalities[job["personality"]]
+		user_input = input_data["prompt"]
+		personality = personalities[input_data["personality"]]
 
 		messages: list[ChatCompletionRequestMessage] = [
 			{"role": "system", "content": personality.prompt},
