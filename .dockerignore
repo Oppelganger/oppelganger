@@ -1,38 +1,25 @@
-.git/
 **/*
 !**/*/
 
-!**/.git*
-!**/.tokei*
-!**/.docker*
-!**/README.md
-!**/Dockerfile
+**/.git*
+**/.tokei*
 
-!LICENSE
-!docker-compose.yml
+!pyproject.toml
+!pdm.toml
+!pdm.lock
 
-**/.idea/**/*
-**/.idea/**/.*
-**/data/**/*
-
-# From bot/.gitignore
-!bot/**/*.sh
-!bot/**/*.py
-
-# From engine/.gitignore
-!engine/**/*.sh
-!engine/**/*.py
-
-# From lipsync/.gitignore
-!lipsync/**/*.sh
-!lipsync/**/*.py
-
-!lipsync/wav2lip.pth
-!lipsync/blazeface.tflite
-!lipsync/gfpgan.pth
+# From models/.gitignore
+!models/gfpgan.pth
+!models/blazeface.tflite
+!models/wav2lip.pth
 
 # From personalities/.gitignore
 !personalities/**/*.json
 !personalities/**/*.mp4
 !personalities/**/*.wav
 
+# From src/.gitignore
+!src/**/*.py
+!src/**/*.pyi
+
+!src/launch.sh

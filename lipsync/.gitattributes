@@ -1,3 +1,0 @@
-wav2lip.pth filter=lfs diff=lfs merge=lfs -text
-blazeface.tflite filter=lfs diff=lfs merge=lfs -text
-gfpgan.pth filter=lfs diff=lfs merge=lfs -text

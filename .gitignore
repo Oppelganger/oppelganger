@@ -7,9 +7,12 @@
 !README.md
 !Dockerfile
 
+!/pyproject.toml
+!/pdm.toml
+!/pdm.lock
+
 !/LICENSE
-!/docker-compose.yml
 
 .idea/**/*
 .idea/**/.*
-data/**/*
+.venv/**/*

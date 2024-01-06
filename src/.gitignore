@@ -1,0 +1,4 @@
+!*.py
+!*.pyi
+
+!/launch.sh
