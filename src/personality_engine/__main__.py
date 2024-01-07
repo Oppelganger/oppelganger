@@ -4,7 +4,6 @@ from typing import Callable, Awaitable, Any
 
 import aioboto3
 import runpod
-from aiobotocore.config import AioConfig as S3Config
 
 from .handler import create_handler
 from .lipsync import load_wav2lip
@@ -28,7 +27,6 @@ async def initialize_handler() -> Callable[..., Awaitable[Any]]:
 		aws_access_key_id=os.getenv("S3_ACCESS_KEY_ID"),
 		aws_secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY"),
 		aws_session_token=os.getenv("S3_SESSION_TOKEN"),
-		config=S3Config(signature_version='s3v4')
 	) as s3:
 		bucket = os.getenv("S3_BUCKET")
 
