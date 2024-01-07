@@ -21,11 +21,13 @@ async def initialize_handler() -> Callable[..., Awaitable[Any]]:
 
 	personalities = await load_personalities(xtts)
 
-	async with aioboto3.Session().resource(
+	async with aioboto3.Session().client(
 		"s3",
 		endpoint_url=os.getenv("S3_ENDPOINT_URL"),
-		aws_access_key_id=os.getenv("S3_KEY_ID"),
-		aws_secret_access_key=os.getenv("S3_ACCESS_KEY"),
+		region_name=os.getenv("S3_REGION_NAME"),
+		aws_access_key_id=os.getenv("S3_ACCESS_KEY_ID"),
+		aws_secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY"),
+		aws_session_token=os.getenv("S3_SESSION_TOKEN"),
 		config=S3Config(signature_version='s3v4')
 	) as s3:
 		bucket = os.getenv("S3_BUCKET")
