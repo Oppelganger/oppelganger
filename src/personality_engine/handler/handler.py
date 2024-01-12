@@ -2,7 +2,7 @@ import os
 import random
 import uuid
 from pathlib import Path
-from typing import Callable, Any, Optional, List
+from typing import Callable, Any, Optional
 
 from TTS.tts.models.xtts import Xtts
 from llama_cpp import ChatCompletionRequestMessage, Llama
@@ -29,7 +29,7 @@ def create_handler(
 		request = Request.model_validate(job['input'])
 		personality = load_personality(s3, xtts_model, request.personality)
 
-		messages = List[ChatCompletionRequestMessage]([
+		messages: list[ChatCompletionRequestMessage] = [
 			{"role": "system", "content": personality.prompt},
 			{"role": "system", "content": "Please write text in less than 20 words"},
 		] + flatten([
@@ -40,7 +40,7 @@ def create_handler(
 			for message in request.messages
 		]) + [
 			{"role": "user", "content": request.prompt},
-		])
+		]
 
 		result = create_chat_completion(llm, messages)
 		text: Optional[str] = result["choices"][0]["message"]["content"]
@@ -48,7 +48,7 @@ def create_handler(
 		if text is None:
 			raise RuntimeError("result from llm is null")
 
-		video = random.choice(personality.video_objects)
+		video, gfpgan_config = random.choice(personality.video_objects)
 
 		generated_audio = Path(f"/tmp/{uuid.uuid4()}.wav")
 		xtts(
@@ -64,6 +64,7 @@ def create_handler(
 		wav2lip.process(
 			str(generated_audio),
 			str(video),
+			gfpgan_config,
 			str(generated_video),
 			personality.enhance,
 			personality.female

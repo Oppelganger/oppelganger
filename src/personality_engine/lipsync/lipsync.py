@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from os import PathLike
+from typing import Tuple
 
 import torch
 from gfpgan import GFPGANer
@@ -41,6 +42,7 @@ class Wav2Lip:
 		self,
 		in_audio: str,
 		in_video: str,
+		gfpgan_config: Tuple[int, int, int, int],
 		out_video: str,
 		enhance: bool,
 		female: bool
@@ -52,6 +54,7 @@ class Wav2Lip:
 			self.gfpgan_model,
 			in_audio,
 			in_video,
+			gfpgan_config,
 			out_video,
 			enhance,
 			female

@@ -3,6 +3,7 @@ import subprocess
 import uuid
 from dataclasses import dataclass
 from typing import List
+from typing import Tuple
 
 import cv2
 import mediapipe as mp
@@ -131,6 +132,7 @@ def wav2lip(
 	gfpgan_model: GFPGANer,
 	in_audio: str,
 	in_video: str,
+	gfpgan_config: Tuple[int, int, int, int],
 	out_video: str,
 	enhance: bool,
 	female: bool
@@ -191,6 +193,8 @@ def wav2lip(
 	frame_h, frame_w = full_frames[0].shape[:-1]
 	out = cv2.VideoWriter(tmp_out, fourcc, fps, (frame_w, frame_h))
 
+	gx1, gy1, gx2, gy2 = gfpgan_config
+
 	with torch.no_grad():
 		for i, (img_batch, mel_batch, frames, coords) in enumerate(gen):
 			img_batch = torch.FloatTensor(np.transpose(img_batch, (0, 3, 1, 2))).to(device)
@@ -207,7 +211,7 @@ def wav2lip(
 				frame[y1:y2, x1:x2] = pred
 
 				if enhance:
-					_, _, frame = gfpgan_model.enhance(frame)
+					_, _, frame[gy1:gy2, gx1, gx2] = gfpgan_model.enhance(frame[gy1:gy2, gx1, gx2])
 
 				out.write(frame)
 
