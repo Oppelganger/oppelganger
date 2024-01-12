@@ -1,8 +1,0 @@
-{
-	"id": "putin",
-	"prompt": "Please behave like the president of the largest country in the world Russia Federation. Like Vladimir Putin.",
-	"sample_video": [ "video.mp4" ],
-	"sample_audio": [ "audio.wav" ],
-	"enhance": false,
-	"female": false
-}

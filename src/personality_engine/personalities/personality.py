@@ -1,16 +1,17 @@
 from dataclasses import dataclass
-from pathlib import Path
+from typing import Tuple
 
 import torch
+
+from .json import PersonalityJson
 
 
 @dataclass
 class Personality:
-	path: Path
-
+	id: str
 	prompt: str
-	sample_video: list[str]
-	sample_audio: list[str]
+	video_objects: list[Tuple[str, Tuple[int, int, int, int]]]  # x1, y1, x2, y2
+	audio_objects: list[str]
 	enhance: bool
 	female: bool
 

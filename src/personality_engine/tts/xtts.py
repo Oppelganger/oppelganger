@@ -5,10 +5,7 @@ import torchaudio
 from TTS.tts.configs.xtts_config import XttsConfig
 from TTS.tts.models.xtts import Xtts
 
-from ..utils import awaitable
 
-
-@awaitable
 def load_xtts(path: str | PathLike = "/models/xtts") -> Xtts:  # TODO: device
 	config = XttsConfig()
 	config.load_json(f"{path}/config.json")
@@ -26,7 +23,6 @@ def load_xtts(path: str | PathLike = "/models/xtts") -> Xtts:  # TODO: device
 	return xtts
 
 
-@awaitable
 def inference(
 	model: Xtts,
 	text: str,

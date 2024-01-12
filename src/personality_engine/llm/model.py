@@ -2,10 +2,7 @@ from os import PathLike
 
 from llama_cpp import Llama
 
-from ..utils import awaitable
 
-
-@awaitable
 def load_llm(path: str | PathLike = '/models/llm.gguf') -> Llama:
 	return Llama(
 		model_path=str(path),

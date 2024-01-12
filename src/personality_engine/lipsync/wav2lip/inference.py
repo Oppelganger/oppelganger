@@ -121,7 +121,7 @@ class VideoCache:
 	faces: List[tuple[cv2.typing.MatLike, cv2.typing.Size]]
 
 
-video_cache = {}
+video_cache: dict[str, VideoCache] = {}
 
 
 def wav2lip(
@@ -202,12 +202,13 @@ def wav2lip(
 			for pred, frame, coord in zip(preds, frames, coords):
 				y1, y2, x1, x2 = coord
 
-				if enhance:
-					_, _, pred = gfpgan_model.enhance(pred)
-
 				pred = cv2.resize(pred.astype(np.uint8), (x2 - x1, y2 - y1))
 
 				frame[y1:y2, x1:x2] = pred
+
+				if enhance:
+					_, _, frame = gfpgan_model.enhance(frame)
+
 				out.write(frame)
 
 	out.release()

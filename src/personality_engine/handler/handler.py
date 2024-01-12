@@ -1,47 +1,57 @@
+import os
 import random
 import uuid
 from pathlib import Path
-from typing import Callable, Coroutine, Any, Optional
+from typing import Callable, Any, Optional, List
 
-import aiofiles.os
 from TTS.tts.models.xtts import Xtts
 from llama_cpp import ChatCompletionRequestMessage, Llama
+from mypy_boto3_s3.client import S3Client
 
+from .reply import Reply
+from .request import Request
 from ..lipsync import Wav2Lip
 from ..llm import create_chat_completion
-from ..personalities import Personality
+from ..personalities import load_personality
 from ..tts.xtts import inference as xtts
+from ..utils import strict_getenv, flatten
+
+bucket_videos = strict_getenv('S3_BUCKET_VIDEOS')
 
 
 def create_handler(
-	upload_to_s3: Callable[[str, str], Coroutine[Any, Any, None]],
+	s3: S3Client,
 	llm: Llama,
 	xtts_model: Xtts,
 	wav2lip: Wav2Lip,
-	personalities: dict[str, Personality]
-) -> Callable[[dict[str, Any]], Coroutine[Any, Any, str | dict[str, Any]]]:
-	async def handler(job: dict[str, Any]) -> str | dict[str, Any]:
-		input_data: dict[str, Any] = job['input']
+) -> Callable[[dict[str, Any]], Reply]:
+	def handler(job: dict[str, Any]) -> Reply:
+		request = Request.model_validate(job['input'])
+		personality = load_personality(s3, xtts_model, request.personality)
 
-		user_input = input_data["prompt"]
-		personality = personalities[input_data["personality"]]
-
-		messages: list[ChatCompletionRequestMessage] = [
+		messages = List[ChatCompletionRequestMessage]([
 			{"role": "system", "content": personality.prompt},
 			{"role": "system", "content": "Please write text in less than 20 words"},
-			{"role": "user", "content": user_input},
-		]
+		] + flatten([
+			[
+				{"role": "user", "content": message.request},
+				{"role": "system", "content": message.reply}  # AFAIK assistant is deprecated
+			]
+			for message in request.messages
+		]) + [
+			{"role": "user", "content": request.prompt},
+		])
 
-		result = await create_chat_completion(llm, messages)
+		result = create_chat_completion(llm, messages)
 		text: Optional[str] = result["choices"][0]["message"]["content"]
 
 		if text is None:
-			return {"error": "result from llm is null"}
+			raise RuntimeError("result from llm is null")
 
-		video = personality.path / random.choice(personality.sample_video)
+		video = random.choice(personality.video_objects)
 
 		generated_audio = Path(f"/tmp/{uuid.uuid4()}.wav")
-		await xtts(
+		xtts(
 			xtts_model,
 			text,
 			personality.gpt_cond_latent,
@@ -51,7 +61,7 @@ def create_handler(
 
 		generated_video = Path(f"/tmp/{uuid.uuid4()}.mp4")
 
-		await wav2lip.process(
+		wav2lip.process(
 			str(generated_audio),
 			str(video),
 			str(generated_video),
@@ -61,10 +71,10 @@ def create_handler(
 
 		object_id = str(uuid.uuid4())
 
-		await upload_to_s3(str(generated_video), object_id)
-		await aiofiles.os.remove(generated_audio)
-		await aiofiles.os.remove(generated_video)
+		s3.upload_file(str(generated_video), bucket_videos, object_id)
+		os.remove(generated_audio)
+		os.remove(generated_video)
 
-		return object_id
+		return Reply(text=text, video_object=object_id)
 
 	return handler

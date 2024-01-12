@@ -1,2 +1,2 @@
-from .load import load as load_personalities
-from .personality import Personality
+from .load import load as load_personality
+from .personality import Personality, PersonalityJson
