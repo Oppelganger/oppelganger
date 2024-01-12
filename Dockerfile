@@ -65,7 +65,6 @@ ADD ${XTTS_BASE_URL}/speakers_xtts.pth /models/xtts/
 ADD ${XTTS_BASE_URL}/hash.md5 /models/xtts/
 
 COPY models /models
-COPY personalities /personalities
 
 COPY src/launch.sh /launch.sh
 COPY src/personality_engine ./personality_engine
