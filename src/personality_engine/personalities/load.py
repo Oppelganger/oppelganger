@@ -18,7 +18,7 @@ def load(s3: S3Client, xtts: Xtts, json: PersonalityJson) -> Personality:
 		return cache[json.id]
 
 	path = f'/tmp/personalities/{json.id}'
-	os.mkdir(path)
+	os.makedirs(path)
 
 	audios: list[str] = []
 	videos: list[Tuple[str, Tuple[int, int, int, int]]] = []
