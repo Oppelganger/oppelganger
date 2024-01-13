@@ -21,18 +21,18 @@ def initialize_handler(s3: S3Client) -> Callable[..., Any]:
 
 
 def main():
-	with boto3.Session().client(
+	s3: S3Client = boto3.Session().client(
 		"s3",
 		endpoint_url=getenv("S3_ENDPOINT_URL"),
 		region_name=getenv("S3_REGION_NAME"),
 		aws_access_key_id=getenv("S3_ACCESS_KEY_ID"),
 		aws_secret_access_key=getenv("S3_SECRET_ACCESS_KEY"),
 		aws_session_token=getenv("S3_SESSION_TOKEN"),
-	) as s3:
-		handler = initialize_handler(s3)
-		runpod.serverless.start({
-			'handler': handler
-		})
+	)
+	handler = initialize_handler(s3)
+	runpod.serverless.start({
+		'handler': handler
+	})
 
 
 if __name__ == '__main__':
