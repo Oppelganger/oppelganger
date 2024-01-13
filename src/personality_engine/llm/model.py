@@ -17,7 +17,7 @@ BasicChatCompletionRequestMessage = ChatCompletionRequestSystemMessage | \
 
 
 @register_chat_format("airoboros")
-def _(messages: List[BasicChatCompletionRequestMessage]) -> ChatFormatterResponse:
+def _(messages: List[BasicChatCompletionRequestMessage], **_) -> ChatFormatterResponse:
 	roles = dict(user='USER', assistant='ASSISTANT')
 	_messages = map_roles(messages, roles)
 	_messages.append((roles['assistant'], None))
