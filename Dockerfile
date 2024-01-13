@@ -58,7 +58,8 @@ RUN set -eux ;\
 		python${PYTHON} \
     ffmpeg \
     libgl1 \
-    libglib2.0-0 ;\
+    libglib2.0-0 \
+    libsndfile1 ;\
 	apt -y purge software-properties-common ;\
 	apt -y autoremove ;\
 	apt clean

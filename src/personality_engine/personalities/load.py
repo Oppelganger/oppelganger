@@ -1,3 +1,4 @@
+import os
 from typing import Tuple
 
 from TTS.tts.models.xtts import Xtts
@@ -17,6 +18,7 @@ def load(s3: S3Client, xtts: Xtts, json: PersonalityJson) -> Personality:
 		return cache[json.id]
 
 	path = f'/tmp/personalities/{json.id}'
+	os.mkdir(path)
 
 	audios: list[str] = []
 	videos: list[Tuple[str, Tuple[int, int, int, int]]] = []
