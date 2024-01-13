@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "lint", "types"]
+groups = ["default", "lint"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:8e4529b8f862fb7935bd74078f8f0d5cb26ad70a425cbc9fb0af4120d5256b1f"
+content_hash = "sha256:218887c22bbeae329a04c45010b9041d1034af6ed9d5eab3d276b64bedd6a842"
 
 [[package]]
 name = "absl-py"
@@ -335,55 +335,55 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.34.17"
+version = "1.34.18"
 requires_python = ">= 3.8"
 summary = "The AWS SDK for Python"
 groups = ["default"]
 dependencies = [
-    "botocore<1.35.0,>=1.34.17",
+    "botocore<1.35.0,>=1.34.18",
     "jmespath<2.0.0,>=0.7.1",
     "s3transfer<0.11.0,>=0.10.0",
 ]
 files = [
-    {file = "boto3-1.34.17-py3-none-any.whl", hash = "sha256:1efc02be786884034d503d59c018cf7650d0cff9fcb37cd2eb49b802a6fe6111"},
-    {file = "boto3-1.34.17.tar.gz", hash = "sha256:8ca248cc84e7e859e4e276eb9c4309fa01a3e58473bf48d6c33448be870c2bb8"},
+    {file = "boto3-1.34.18-py3-none-any.whl", hash = "sha256:ae7cfdf45f4dfd33bd3e84e36afcfbf0517e64a32e647989a068f34d053572b8"},
+    {file = "boto3-1.34.18.tar.gz", hash = "sha256:5e38ca63007e903a7efe0a1751a0374d287b50d7bc148b9d3d495cdf74a0b712"},
 ]
 
 [[package]]
 name = "boto3-stubs"
-version = "1.34.17"
+version = "1.34.18"
 requires_python = ">=3.8"
-summary = "Type annotations for boto3 1.34.17 generated with mypy-boto3-builder 7.23.1"
-groups = ["types"]
+summary = "Type annotations for boto3 1.34.18 generated with mypy-boto3-builder 7.23.1"
+groups = ["default"]
 dependencies = [
     "botocore-stubs",
     "types-s3transfer",
     "typing-extensions>=4.1.0; python_version < \"3.12\"",
 ]
 files = [
-    {file = "boto3-stubs-1.34.17.tar.gz", hash = "sha256:4b3af2263a5503920760223c5db16e475a02fc6fcbe951f4a45e7c64cb065034"},
-    {file = "boto3_stubs-1.34.17-py3-none-any.whl", hash = "sha256:33d0ad07aa7e3aefd4213c51fb6272f086ad4b94a66e6d131dd3ebd006fcb74c"},
+    {file = "boto3-stubs-1.34.18.tar.gz", hash = "sha256:e94fb679e7799916e159e913f49dd5c82470df1d1e566c7b523f703e2ed5cec1"},
+    {file = "boto3_stubs-1.34.18-py3-none-any.whl", hash = "sha256:284639a9fe4233379fceb92e1d357239a80d8359ecf082fb0b95c8cf64c5e858"},
 ]
 
 [[package]]
 name = "boto3-stubs"
-version = "1.34.17"
+version = "1.34.18"
 extras = ["s3"]
 requires_python = ">=3.8"
-summary = "Type annotations for boto3 1.34.17 generated with mypy-boto3-builder 7.23.1"
-groups = ["types"]
+summary = "Type annotations for boto3 1.34.18 generated with mypy-boto3-builder 7.23.1"
+groups = ["default"]
 dependencies = [
-    "boto3-stubs==1.34.17",
+    "boto3-stubs==1.34.18",
     "mypy-boto3-s3<1.35.0,>=1.34.0",
 ]
 files = [
-    {file = "boto3-stubs-1.34.17.tar.gz", hash = "sha256:4b3af2263a5503920760223c5db16e475a02fc6fcbe951f4a45e7c64cb065034"},
-    {file = "boto3_stubs-1.34.17-py3-none-any.whl", hash = "sha256:33d0ad07aa7e3aefd4213c51fb6272f086ad4b94a66e6d131dd3ebd006fcb74c"},
+    {file = "boto3-stubs-1.34.18.tar.gz", hash = "sha256:e94fb679e7799916e159e913f49dd5c82470df1d1e566c7b523f703e2ed5cec1"},
+    {file = "boto3_stubs-1.34.18-py3-none-any.whl", hash = "sha256:284639a9fe4233379fceb92e1d357239a80d8359ecf082fb0b95c8cf64c5e858"},
 ]
 
 [[package]]
 name = "botocore"
-version = "1.34.17"
+version = "1.34.18"
 requires_python = ">= 3.8"
 summary = "Low-level, data-driven core of boto 3."
 groups = ["default"]
@@ -393,22 +393,22 @@ dependencies = [
     "urllib3<2.1,>=1.25.4; python_version >= \"3.10\"",
 ]
 files = [
-    {file = "botocore-1.34.17-py3-none-any.whl", hash = "sha256:7272c39032c6f1d62781e4c8445d9a1d9140c2bf52ba7ee66bf6db559c4b2427"},
-    {file = "botocore-1.34.17.tar.gz", hash = "sha256:e48a662f3a6919219276b55085e8f73c3347966675f55e9d448be30cf79678ee"},
+    {file = "botocore-1.34.18-py3-none-any.whl", hash = "sha256:2067d8385c11b7cf2d336227d8fa5aea632fe61afbadb3168dc169dcc13d8c3e"},
+    {file = "botocore-1.34.18.tar.gz", hash = "sha256:85a77e72560a45b0dfdad94f92f5e114c82be07a51bb2d19dd310dab8be158cf"},
 ]
 
 [[package]]
 name = "botocore-stubs"
-version = "1.34.17"
+version = "1.34.18"
 requires_python = ">=3.8,<4.0"
 summary = "Type annotations and code completion for botocore"
-groups = ["types"]
+groups = ["default"]
 dependencies = [
     "types-awscrt",
 ]
 files = [
-    {file = "botocore_stubs-1.34.17-py3-none-any.whl", hash = "sha256:f49b143427d15e9bda51f3c99de7dd7ccf58519a3f33e10b9d41053c41567a43"},
-    {file = "botocore_stubs-1.34.17.tar.gz", hash = "sha256:cac1cbbd0d5dcc427a5f91be09be9a0a18d1a87c29e779ae717b424bd7436eb1"},
+    {file = "botocore_stubs-1.34.18-py3-none-any.whl", hash = "sha256:7eb5581410b2cfc920016729e962f7aada6c49ce9926f36dca2a76d7c5c8b9be"},
+    {file = "botocore_stubs-1.34.18.tar.gz", hash = "sha256:c5afa6bb37ca89d7fbdb210913903148566a0f2c60d9aea1256dda76720f1771"},
 ]
 
 [[package]]
@@ -1733,7 +1733,7 @@ name = "mypy-boto3-s3"
 version = "1.34.14"
 requires_python = ">=3.8"
 summary = "Type annotations for boto3.S3 1.34.14 service generated with mypy-boto3-builder 7.21.0"
-groups = ["types"]
+groups = ["default"]
 dependencies = [
     "typing-extensions>=4.1.0; python_version < \"3.12\"",
 ]
@@ -2407,7 +2407,7 @@ files = [
 
 [[package]]
 name = "pydantic-extra-types"
-version = "2.4.0"
+version = "2.4.1"
 requires_python = ">=3.8"
 summary = "Extra Pydantic types."
 groups = ["default"]
@@ -2415,8 +2415,8 @@ dependencies = [
     "pydantic>=2.5.2",
 ]
 files = [
-    {file = "pydantic_extra_types-2.4.0-py3-none-any.whl", hash = "sha256:f681b6f6c91f386de4193d0827d61ff0631c79bb4bc8819ebb1ba3753fd84586"},
-    {file = "pydantic_extra_types-2.4.0.tar.gz", hash = "sha256:e99136fc350803942e0e5a822eba8bf2087fe4982da6676b9382a71e7e9fc5b8"},
+    {file = "pydantic_extra_types-2.4.1-py3-none-any.whl", hash = "sha256:b3cec735e471b1234a1cc05a680dc080836bab6970cab40d60dcade97fe68f5d"},
+    {file = "pydantic_extra_types-2.4.1.tar.gz", hash = "sha256:63314096ca57bc1575d988d1a770d73af76aaebe684140f24333b60af4134a2c"},
 ]
 
 [[package]]
@@ -3065,7 +3065,7 @@ files = [
 
 [[package]]
 name = "tb-nightly"
-version = "2.16.0a20240111"
+version = "2.16.0a20240112"
 requires_python = ">=3.9"
 summary = "TensorBoard lets you watch Tensors Flow"
 groups = ["default"]
@@ -3082,7 +3082,7 @@ dependencies = [
     "werkzeug>=1.0.1",
 ]
 files = [
-    {file = "tb_nightly-2.16.0a20240111-py3-none-any.whl", hash = "sha256:a0d8ac2baee2a7ad96983b6e7e6a40ef0198f5ffed355e55946bebdfaa94e77a"},
+    {file = "tb_nightly-2.16.0a20240112-py3-none-any.whl", hash = "sha256:8c66d98ec850cd2184276906524cbe7c635470a0b0d67020663a56ea1323631e"},
 ]
 
 [[package]]
@@ -3123,13 +3123,13 @@ files = [
 
 [[package]]
 name = "tf-keras-nightly"
-version = "2.16.0.dev2024011110"
+version = "2.16.0.dev2024011210"
 requires_python = ">=3.9"
 summary = "Deep learning for humans."
 groups = ["default"]
 files = [
-    {file = "tf_keras-nightly-2.16.0.dev2024011110.tar.gz", hash = "sha256:7e7ce894b3cedb122037697dc1dc78100b40c7656b037b828d485e27823d5c3e"},
-    {file = "tf_keras_nightly-2.16.0.dev2024011110-py3-none-any.whl", hash = "sha256:4218583030ed9b3ffd01ef687c8099801b1c523e8e5d97537253c9b8f51d58d0"},
+    {file = "tf_keras-nightly-2.16.0.dev2024011210.tar.gz", hash = "sha256:5cb6510caacf173b89eefe8958feea78bee9382c671a9dc52ceec78ee28c4df5"},
+    {file = "tf_keras_nightly-2.16.0.dev2024011210-py3-none-any.whl", hash = "sha256:75fd0d101c0c2bafb3c6ea68177c297c79ae3a3e667acf75505351b3aaa38433"},
 ]
 
 [[package]]
@@ -3488,7 +3488,7 @@ name = "types-awscrt"
 version = "0.20.0"
 requires_python = ">=3.7,<4.0"
 summary = "Type annotations and code completion for awscrt"
-groups = ["types"]
+groups = ["default"]
 files = [
     {file = "types_awscrt-0.20.0-py3-none-any.whl", hash = "sha256:e872b65d041687ec7fb49fb4dcb871ff10ade5efeca02722e037a03bff81db7e"},
     {file = "types_awscrt-0.20.0.tar.gz", hash = "sha256:99778c952e1eae10cc7a53468413001177026c9434345bf00120bb2ea5b79109"},
@@ -3499,7 +3499,7 @@ name = "types-s3transfer"
 version = "0.10.0"
 requires_python = ">=3.7,<4.0"
 summary = "Type annotations and code completion for s3transfer"
-groups = ["types"]
+groups = ["default"]
 files = [
     {file = "types_s3transfer-0.10.0-py3-none-any.whl", hash = "sha256:44fcdf0097b924a9aab1ee4baa1179081a9559ca62a88c807e2b256893ce688f"},
     {file = "types_s3transfer-0.10.0.tar.gz", hash = "sha256:35e4998c25df7f8985ad69dedc8e4860e8af3b43b7615e940d53c00d413bdc69"},
@@ -3510,7 +3510,7 @@ name = "typing-extensions"
 version = "4.9.0"
 requires_python = ">=3.8"
 summary = "Backported and Experimental Type Hints for Python 3.8+"
-groups = ["default", "lint", "types"]
+groups = ["default", "lint"]
 files = [
     {file = "typing_extensions-4.9.0-py3-none-any.whl", hash = "sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd"},
     {file = "typing_extensions-4.9.0.tar.gz", hash = "sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783"},
