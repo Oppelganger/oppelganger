@@ -23,3 +23,7 @@
 !src/**/*.pyi
 
 !src/launch.sh
+
+# Cache fixes
+**/__pycache__/**/*
+**/.mypy_cache/**/*
