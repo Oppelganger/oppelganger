@@ -32,6 +32,18 @@ RUN set -eux ;\
 FROM docker.io/nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS final
 WORKDIR /work
 
+ARG LLM_URL=https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf
+ADD ${LLM_URL} /models/llm.gguf
+
+ARG XTTS_BASE_URL=https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main
+ADD ${XTTS_BASE_URL}/config.json /models/xtts/
+ADD ${XTTS_BASE_URL}/vocab.json /models/xtts/
+ADD ${XTTS_BASE_URL}/model.pth /models/xtts/
+ADD ${XTTS_BASE_URL}/speakers_xtts.pth /models/xtts/
+ADD ${XTTS_BASE_URL}/hash.md5 /models/xtts/
+
+COPY models /models
+
 ARG PYTHON=3.11
 ENV PYTHON_EXE=python${PYTHON}
 
@@ -53,18 +65,6 @@ RUN set -eux ;\
 
 ENV PYTHONPATH=/work/pkgs
 COPY --from=builder /work/__pypackages__/${PYTHON}/lib ./pkgs
-
-ARG LLM_URL=https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf
-ADD ${LLM_URL} /models/llm.gguf
-
-ARG XTTS_BASE_URL=https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main
-ADD ${XTTS_BASE_URL}/config.json /models/xtts/
-ADD ${XTTS_BASE_URL}/vocab.json /models/xtts/
-ADD ${XTTS_BASE_URL}/model.pth /models/xtts/
-ADD ${XTTS_BASE_URL}/speakers_xtts.pth /models/xtts/
-ADD ${XTTS_BASE_URL}/hash.md5 /models/xtts/
-
-COPY models /models
 
 COPY src/launch.sh /launch.sh
 COPY src/personality_engine ./personality_engine
