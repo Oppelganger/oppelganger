@@ -24,8 +24,8 @@ def create_handler(
 	llm: Llama,
 	xtts_model: Xtts,
 	wav2lip: Wav2Lip,
-) -> Callable[[dict[str, Any]], Reply]:
-	def handler(job: dict[str, Any]) -> Reply:
+) -> Callable[[dict[str, Any]], dict[str, Any]]:
+	def handler(job: dict[str, Any]) -> dict[str, Any]:
 		request = Request.model_validate(job['input'])
 		personality = load_personality(s3, xtts_model, request.personality)
 
@@ -76,6 +76,6 @@ def create_handler(
 		os.remove(generated_audio)
 		os.remove(generated_video)
 
-		return Reply(text=text, video_object=object_id)
+		return Reply(text=text, video_object=object_id).model_dump(mode='json')
 
 	return handler
