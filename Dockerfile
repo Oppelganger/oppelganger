@@ -32,7 +32,7 @@ RUN set -eux ;\
 FROM docker.io/nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu22.04 AS final
 WORKDIR /work
 
-ARG LLM_URL=https://huggingface.co/TheBloke/Mixtral_7Bx2_MoE-GGUF/resolve/main/mixtral_7bx2_moe.Q5_K_M.gguf
+ARG LLM_URL=https://huggingface.co/TheBloke/airoboros-mistral2.2-7B-GGUF/resolve/main/airoboros-mistral2.2-7b.Q6_K.gguf
 ADD ${LLM_URL} /models/llm.gguf
 
 ARG XTTS_BASE_URL=https://coqui.gateway.scarf.sh/hf-coqui/XTTS-v2/main

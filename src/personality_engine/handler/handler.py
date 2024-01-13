@@ -31,11 +31,10 @@ def create_handler(
 
 		messages: list[ChatCompletionRequestMessage] = [
 			{"role": "system", "content": personality.prompt},
-			{"role": "system", "content": "Please write text in less than 20 words"},
 		] + flatten([
 			[
 				{"role": "user", "content": message.request},
-				{"role": "system", "content": message.reply}  # AFAIK assistant is deprecated
+				{"role": "assistant", "content": message.reply}
 			]
 			for message in request.messages
 		]) + [
@@ -48,7 +47,7 @@ def create_handler(
 		if text is None:
 			raise RuntimeError("result from llm is null")
 
-		video, gfpgan_config = random.choice(personality.video_objects)
+		video = random.choice(personality.video_objects)
 
 		generated_audio = Path(f"/tmp/{uuid.uuid4()}.wav")
 		xtts(
@@ -64,7 +63,6 @@ def create_handler(
 		wav2lip.process(
 			str(generated_audio),
 			str(video),
-			gfpgan_config,
 			str(generated_video),
 			personality.enhance,
 			personality.female
