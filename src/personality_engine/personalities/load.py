@@ -15,12 +15,12 @@ cache: dict[str, Personality] = {}
 
 
 def load(s3: S3Client, xtts: Xtts, json: PersonalityJson) -> Personality:
-	if json.id in cache:
-		return cache[json.id]
-
 	with lock:
+		if json.id in cache:
+			return cache[json.id]
+
 		path = f'/tmp/personalities/{json.id}'
-		os.makedirs(path)
+		os.makedirs(path, exist_ok=True)
 
 		audios: list[str] = []
 		videos: list[str] = []
