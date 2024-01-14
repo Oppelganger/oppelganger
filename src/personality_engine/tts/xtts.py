@@ -28,11 +28,12 @@ def inference(
 	text: str,
 	gpt_cond_latent: torch.Tensor,
 	speaker_embedding: torch.Tensor,
-	path: str | PathLike
+	path: str | PathLike,
+	language: str = "en"
 ):
 	res = model.inference(
 		text,
-		"en",
+		language,
 		gpt_cond_latent,
 		speaker_embedding,
 		speed=1.1,

@@ -1,12 +1,13 @@
-from typing import Tuple
-
 from pydantic import BaseModel
+
+from .types import Language
 
 
 class PersonalityJson(BaseModel):
 	id: str
 	prompt: str
-	video_objects: dict[str, Tuple[int, int, int, int]]  # x1, y1, x2, y2
+	video_objects: list[str]
 	audio_objects: list[str]
+	language: Language
 	enhance: bool
 	female: bool

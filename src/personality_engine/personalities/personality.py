@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 import torch
 
+from .types import Language
+
 
 @dataclass
 class Personality:
@@ -9,6 +11,7 @@ class Personality:
 	prompt: str
 	video_objects: list[str]
 	audio_objects: list[str]
+	language: Language
 	enhance: bool
 	female: bool
 

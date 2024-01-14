@@ -55,7 +55,8 @@ def create_handler(
 			text,
 			personality.gpt_cond_latent,
 			personality.speaker_embedding,
-			generated_audio
+			generated_audio,
+			language=str(personality.language)
 		)
 
 		generated_video = Path(f"/tmp/{uuid.uuid4()}.mp4")
