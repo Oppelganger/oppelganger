@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from os import PathLike
-from typing import Tuple
 
 import torch
 from gfpgan import GFPGANer

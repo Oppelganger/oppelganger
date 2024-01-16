@@ -3,7 +3,6 @@ import subprocess
 import uuid
 from dataclasses import dataclass
 from typing import List
-from typing import Tuple
 
 import cv2
 import mediapipe as mp
@@ -208,7 +207,8 @@ def wav2lip(
 				frame[y1:y2, x1:x2] = pred
 
 				if enhance:
-					_, _, frame = gfpgan_model.enhance(frame)
+					_, _, gfpgan_result = gfpgan_model.enhance(frame)
+					frame = cv2.resize(gfpgan_result, (frame_w, frame_h), interpolation=cv2.INTER_CUBIC)
 
 				out.write(frame)
 

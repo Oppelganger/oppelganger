@@ -47,7 +47,7 @@ def load(s3: S3Client, xtts: Xtts, json: PersonalityJson) -> Personality:
 
 		personality = Personality(
 			json.id,
-			json.prompt,
+			'\n'.join(json.prompt),
 			videos,
 			audios,
 			json.language,

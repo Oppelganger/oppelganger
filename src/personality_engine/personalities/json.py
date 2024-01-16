@@ -5,7 +5,7 @@ from .types import Language
 
 class PersonalityJson(BaseModel):
 	id: str
-	prompt: str
+	prompt: list[str]
 	video_objects: list[str]
 	audio_objects: list[str]
 	language: Language
