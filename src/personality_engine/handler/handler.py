@@ -15,6 +15,7 @@ from ..llm import create_chat_completion
 from ..personalities import load_personality
 from ..tts.xtts import inference as xtts
 from ..utils import strict_getenv, flatten
+from .types import ResponseType
 
 bucket_videos = strict_getenv('S3_BUCKET_VIDEOS')
 
@@ -47,7 +48,12 @@ def create_handler(
 		if text is None:
 			raise RuntimeError("result from llm is null")
 
-		video = random.choice(personality.video_objects)
+		if request.response_type == ResponseType.TEXT:
+			return Reply(
+				text=text,
+				object_type=request.response_type,
+				object=None
+			).model_dump(mode='json')
 
 		generated_audio = Path(f"/tmp/{uuid.uuid4()}.wav")
 		xtts(
@@ -59,6 +65,17 @@ def create_handler(
 			language=str(personality.language)
 		)
 
+		if request.response_type == ResponseType.AUDIO:
+			object_id = str(uuid.uuid4())
+			s3.upload_file(str(generated_audio), bucket_videos, object_id)
+			os.remove(generated_audio)
+			return Reply(
+				text=text,
+				object_type=request.response_type,
+				object=object_id
+			).model_dump(mode='json')
+
+		video = random.choice(personality.video_objects)
 		generated_video = Path(f"/tmp/{uuid.uuid4()}.mp4")
 
 		wav2lip.process(
@@ -75,6 +92,10 @@ def create_handler(
 		os.remove(generated_audio)
 		os.remove(generated_video)
 
-		return Reply(text=text, video_object=object_id).model_dump(mode='json')
+		return Reply(
+			text=text,
+			object_type=request.response_type,
+			object=object_id
+		).model_dump(mode='json')
 
 	return handler
