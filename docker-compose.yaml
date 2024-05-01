@@ -1,7 +1,16 @@
 version: '3.8'
 
 services:
-  personality-engine:
+  frontend:
+    user: root
+    image: personality-frontend:latest
+    restart: always
+    ports:
+      - '3000:3000'
+    networks:
+      - bridge
+
+  engine:
     image: func/personality-engine:latest
     restart: unless-stopped
     ports:

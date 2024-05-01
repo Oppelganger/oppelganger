@@ -13,4 +13,4 @@ Building:
 ```shell
 $ docker buildx build . --target final --build-arg CUDA_VERSION=12.2.2 --tag func/personality-engine:latest
 ```
-Do not forget `-t tag`
+Do not forget `--t tag`
