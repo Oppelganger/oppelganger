@@ -1,4 +1,9 @@
-# Personality Engine
+# Oppelganger
+
+Building:
+```shell
+$ docker buildx build . --target final --build-arg CUDA_VERSION=12.2.2 --tag funcid/oppelganger:latest
+```
 
 Environment variables:
 - S3_ENDPOINT_URL
@@ -8,9 +13,3 @@ Environment variables:
 - S3_ACCESS_KEY_ID
 - S3_SECRET_ACCESS_KEY
 - S3_SESSION_TOKEN
-
-Building:
-```shell
-$ docker buildx build . --target final --build-arg CUDA_VERSION=12.2.2 --tag func/personality-engine:latest
-```
-Do not forget `--t tag`

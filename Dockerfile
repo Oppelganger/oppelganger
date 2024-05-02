@@ -68,7 +68,7 @@ ENV PYTHONPATH=/work/pkgs
 COPY --from=builder /work/__pypackages__/${PYTHON}/lib ./pkgs
 
 COPY src/launch.sh /launch.sh
-COPY src/personality_engine ./personality_engine
+COPY src/oppelganger ./oppelganger
 
 
 ENTRYPOINT [ "/launch.sh" ]
