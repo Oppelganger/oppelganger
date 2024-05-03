@@ -33,6 +33,15 @@ def update_stage(stage_name: str):
     stage.last_update = datetime.now()
 
 
+def upload_to_s3(s3: S3Client, path: Path, bucket_name: str, key: str) -> str:
+    s3.upload_file(str(path), bucket_name, key)
+    os.remove(path)
+    return s3.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': bucket_videos, 'Key': key},
+        ExpiresIn=7200
+    )
+
 def create_handler(
         s3: S3Client,
         llm: Llama,
@@ -67,7 +76,8 @@ def create_handler(
             return Reply(
                 text=text,
                 object_type=request.response_type,
-                object=None
+                object=None,
+                object_url=None
             ).model_dump(mode='json')
 
         update_stage('Создание аудио ответа')
@@ -83,12 +93,11 @@ def create_handler(
 
         if request.response_type == ResponseType.AUDIO:
             object_id = str(uuid.uuid4()) + ".wav"
-            s3.upload_file(str(generated_audio), bucket_videos, object_id)
-            os.remove(generated_audio)
             return Reply(
                 text=text,
                 object_type=request.response_type,
-                object=object_id
+                object=object_id,
+                object_url=upload_to_s3(s3, generated_audio, bucket_videos, object_id)
             ).model_dump(mode='json')
 
         update_stage('Процесс синхронизации губ на видео')
@@ -103,16 +112,14 @@ def create_handler(
             personality.female
         )
 
-        object_id = str(uuid.uuid4()) + ".mp4"
-
-        s3.upload_file(str(generated_video), bucket_videos, object_id)
         os.remove(generated_audio)
-        os.remove(generated_video)
+        object_id = str(uuid.uuid4()) + ".mp4"
 
         return Reply(
             text=text,
             object_type=request.response_type,
-            object=object_id
+            object=object_id,
+            object_url=upload_to_s3(s3, generated_video, bucket_videos, object_id)
         ).model_dump(mode='json')
 
     return handler

@@ -3,8 +3,8 @@ from os import getenv
 from typing import Callable, Any
 
 import boto3
-from mypy_boto3_s3.client import S3Client
 
+from .utils import strict_getenv
 from .handler import get_active_status
 from .handler import create_handler
 from .lipsync import load_wav2lip
@@ -18,28 +18,25 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+s3 = boto3.Session().client(
+    "s3",
+    endpoint_url=getenv("S3_ENDPOINT_URL"),
+    region_name=getenv("S3_REGION_NAME"),
+    aws_access_key_id=getenv("S3_ACCESS_KEY_ID"),
+    aws_secret_access_key=getenv("S3_SECRET_ACCESS_KEY"),
+    aws_session_token=getenv("S3_SESSION_TOKEN"),
+)
+
+
 def initialize_handler() -> Callable[..., Any]:
-    s3: S3Client = boto3.Session().client(
-        "s3",
-        endpoint_url=getenv("S3_ENDPOINT_URL"),
-        region_name=getenv("S3_REGION_NAME"),
-        aws_access_key_id=getenv("S3_ACCESS_KEY_ID"),
-        aws_secret_access_key=getenv("S3_SECRET_ACCESS_KEY"),
-        aws_session_token=getenv("S3_SESSION_TOKEN"),
-    )
     llm = load_llm()
     xtts = load_xtts()
     wav2lip = load_wav2lip(torch_device)
@@ -57,9 +54,15 @@ def request_status():
     return get_active_status()
 
 
-@app.get("/about")
+@app.get("/list_files")
 def read_root():
-    return {"Hello": "World"}
+    objects = []
+    response = s3.list_objects_v2(Bucket=strict_getenv('S3_BUCKET_PERSONALITIES'))
+
+    for obj in response.get('Contents', []):
+        objects.append(obj['Key'])
+
+    return objects
 
 
 @app.get("/check_gpu_driver")
