@@ -1,9 +1,8 @@
 import os
 import random
 import uuid
-from datetime import datetime
 from pathlib import Path
-from typing import Callable, Any, Optional
+from typing import Callable, Any, Optional, Dict
 
 from TTS.tts.models.xtts import Xtts
 from llama_cpp import ChatCompletionRequestMessage, Llama
@@ -20,17 +19,6 @@ from ..utils import strict_getenv, flatten
 from .types import ResponseType
 
 bucket_videos = strict_getenv('S3_BUCKET_VIDEOS')
-stage = Stage()
-
-
-def get_active_status():
-    return stage
-
-
-def update_stage(stage_name: str):
-    global stage
-    stage.stage = stage_name
-    stage.last_update = datetime.now()
 
 
 def upload_to_s3(s3: S3Client, path: Path, bucket_name: str, key: str) -> str:
@@ -42,14 +30,15 @@ def upload_to_s3(s3: S3Client, path: Path, bucket_name: str, key: str) -> str:
         ExpiresIn=7200
     )
 
+
 def create_handler(
         s3: S3Client,
         llm: Llama,
         xtts_model: Xtts,
-        wav2lip: Wav2Lip,
-) -> Callable[[dict[str, Any]], dict[str, Any]]:
-    def handler(job: dict[str, Any]) -> dict[str, Any]:
-        update_stage('Получение данных личности из хранилища')
+        wav2lip: Wav2Lip
+) -> Callable[[dict[str, Any], Stage], dict[str, Any]]:
+    def handler(job: dict[str, Any], stage: Stage) -> dict[str, Any]:
+        stage.update_stage('Получение данных личности из хранилища')
         request = Request.model_validate(job['input'])
         personality = load_personality(s3, xtts_model, request.personality)
 
@@ -65,7 +54,7 @@ def create_handler(
                                                            {"role": "user", "content": request.prompt},
                                                        ]
 
-        update_stage('Создание текстового ответа')
+        stage.update_stage('Создание текстового ответа')
         result = create_chat_completion(llm, messages)
         text: Optional[str] = result["choices"][0]["message"]["content"]
 
@@ -80,7 +69,7 @@ def create_handler(
                 object_url=None
             ).model_dump(mode='json')
 
-        update_stage('Создание аудио ответа')
+        stage.update_stage('Создание аудио ответа')
         generated_audio = Path(f"/tmp/{uuid.uuid4()}.wav")
         xtts(
             xtts_model,
@@ -100,7 +89,7 @@ def create_handler(
                 object_url=upload_to_s3(s3, generated_audio, bucket_videos, object_id)
             ).model_dump(mode='json')
 
-        update_stage('Процесс синхронизации губ на видео')
+        stage.update_stage('Процесс синхронизации губ на видео')
         video = random.choice(personality.video_objects)
         generated_video = Path(f"/tmp/{uuid.uuid4()}.mp4")
 
@@ -109,17 +98,23 @@ def create_handler(
             str(video),
             str(generated_video),
             personality.enhance,
-            personality.female
+            personality.female,
+            stage
         )
+
+        stage.update_stage('Загрузка файла в хранилище')
 
         os.remove(generated_audio)
         object_id = str(uuid.uuid4()) + ".mp4"
+        url = upload_to_s3(s3, generated_video, bucket_videos, object_id)
+
+        stage.update_stage('Генерация завершена', object_url=url)
 
         return Reply(
             text=text,
             object_type=request.response_type,
             object=object_id,
-            object_url=upload_to_s3(s3, generated_video, bucket_videos, object_id)
+            object_url=url
         ).model_dump(mode='json')
 
     return handler

@@ -13,6 +13,7 @@ from .wav2lip import (
 )
 from .._gfpgan import load_gfpgan
 from ..blazeface import BlazeFace, load_blazeface
+from ..handler.stage import Stage
 
 
 @dataclass
@@ -43,7 +44,8 @@ class Wav2Lip:
 		in_video: str,
 		out_video: str,
 		enhance: bool,
-		female: bool
+		female: bool,
+		stage: Stage
 	):
 		return wav2lip(
 			self.device,
@@ -54,5 +56,6 @@ class Wav2Lip:
 			in_video,
 			out_video,
 			enhance,
-			female
+			female,
+			stage
 		)

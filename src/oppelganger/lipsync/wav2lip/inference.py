@@ -13,6 +13,7 @@ from mediapipe.tasks.python import vision as mpv
 
 from .audio import load_wav, melspectrogram
 from .models import Wav2Lip
+from ...handler.stage import Stage
 
 face_size: int = 96
 batch_size: int = 128
@@ -133,7 +134,8 @@ def wav2lip(
 	in_video: str,
 	out_video: str,
 	enhance: bool,
-	female: bool
+	female: bool,
+	stage: Stage
 ):
 	tmp_out = f'/tmp/result-{uuid.uuid4()}.nut'
 
@@ -207,6 +209,7 @@ def wav2lip(
 				frame[y1:y2, x1:x2] = pred
 
 				if enhance:
+					stage.update_stage('Улучшение качества видеопотока')
 					_, _, gfpgan_result = gfpgan_model.enhance(frame)
 					frame = cv2.resize(gfpgan_result, (frame_w, frame_h), interpolation=cv2.INTER_CUBIC)
 
@@ -214,6 +217,7 @@ def wav2lip(
 
 	out.release()
 
+	stage.update_stage('Перекодировка видеопотока')
 	command = 'ffmpeg -y -i {} -i {} -strict -2 -c:v h264_nvenc -preset fast {}'
 	subprocess.call(command.format(in_audio, tmp_out, out_video), shell=True)
 	os.remove(tmp_out)
